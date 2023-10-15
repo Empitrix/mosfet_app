@@ -1,0 +1,121 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+/releases/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Myself
+
+
+# IDE files / directoriea
+.dart_tool/
+.idea
+
+# Android folder but not AndroidManifest.xml file
+android/*
+!/android/app/src/main/AndroidManifest.xml
+
+assets/ffmpeg/*
+!assets/ffmpeg
+
+# All the build folders
+build/
+ios
+linux
+macos
+#tmp
+web
+
+# Windows files include main cpp file
+windows
+!/windows/runner/main.cpp
+
+# Flutter default files/directories
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+#427817
+#427817.pub
+.vscode
+
+
+# Generated files by application / creator
+config.json
+local.json
+struction.txt
+todo.txt
+/lib/utils/personal.dart
+#savedConfig.json
+#tasks.md
+#test_config.json
+#testConfig.json
+#release/
+
+# -- Default setting by dart suggestion --
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Mac
+.DS_Store
+doc/api/
+pubspec.lock
