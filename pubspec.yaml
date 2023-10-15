@@ -20,3 +20,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: TitilliumWebRegular
+      fonts:
+        - asset: assets/fonts/TitilliumWeb-Regular.ttf
+
+    - family: TitilliumWebSemiBold
+      fonts:
+        - asset: assets/fonts/TitilliumWeb-SemiBold.ttf
