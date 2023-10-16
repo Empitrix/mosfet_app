@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
 			child: Scaffold(
 				key: scaffoldKey,
 				drawer: DrawerPage(scaffoldKey: scaffoldKey),
+
 				appBar: AppBar(
 					automaticallyImplyLeading: false,
 					title: const Text("News"),

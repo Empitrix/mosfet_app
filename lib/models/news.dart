@@ -38,8 +38,8 @@ class News {
 			source: input["source"],
 			img: input["img"],
 			date: input["date"],
-			texts: input["texts"],
-			links: input["links"]
+			texts: List<String>.from(input["texts"]),
+			links: List<String>.from(input["links"])
 		);
 	}
 
