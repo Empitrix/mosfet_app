@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mosfet/backend/backend.dart';
+import 'package:mosfet/config/provider_manager.dart';
+import 'package:mosfet/config/public.dart';
+import 'package:mosfet/database/database.dart';
+import 'package:mosfet/models/news.dart';
+import 'package:mosfet/utils/loading.dart';
 import 'package:mosfet/views/drawer_page.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
 	const HomePage({super.key});
@@ -12,6 +19,43 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
 	GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+	bool isLoaded = false;
+	Database database = Database();
+	List<News> news = [];
+
+
+	void _updateNews({required List<News> all, required List<String> topics}){
+		List<News> dummyList = [];
+		for(News paper in all){
+			if(!topics.any((t) => vStr(t) == vStr(paper.topic))){
+				dummyList.add(paper);
+			}
+		}
+		setState(() { news = dummyList; });
+	}
+
+
+	Future<void> initialize() async {
+		setState(() { isLoaded = false; });
+
+		await initializeLoading();
+		database.init();
+		Loaded loaded = loadAllContents();
+		if(mounted) Provider.of<ProviderManager>(context, listen: false).changeTheme(loaded.themeMode);
+		setState(() {
+			dMode = loaded.themeMode == ThemeMode.dark;
+			news = loaded.news;
+		});
+		_updateNews(all: loaded.news, topics: loaded.bannedTopics);
+		setState(() { isLoaded = true; });
+	}
+
+
+	@override
+	void initState() {
+		initialize();
+		super.initState();
+	}
 
 	@override
 	Widget build(BuildContext context) {
@@ -30,7 +74,8 @@ class _HomePageState extends State<HomePage> {
 						},
 					),
 				),
-				body: const Center(child: Text("Mosfet!")),
+				body: isLoaded ? const Center(child: Text("Mosfet!")):
+					const Center(child: CircularProgressIndicator()),
 			),
 		);
 	}

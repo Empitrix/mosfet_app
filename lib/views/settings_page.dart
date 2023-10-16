@@ -3,6 +3,7 @@ import 'package:mosfet/components/tile.dart';
 import 'package:mosfet/config/navigator.dart';
 import 'package:mosfet/config/provider_manager.dart';
 import 'package:mosfet/config/public.dart';
+import 'package:mosfet/database/database.dart';
 import 'package:mosfet/views/home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +17,11 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
 
+	Database database = Database();
+
 	Future<void> loadValues() async {
 		/* Load settings from database */
-		setState(() { dMode; });
+		// setState(() { dMode; });
 	}
 
 	@override
@@ -53,6 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
 								Provider.of<ProviderManager>(context, listen: false).changeTheme(
 									dMode ? ThemeMode.dark : ThemeMode.light);
 								// Update on database
+								database.updateTheme(dMode ? ThemeMode.dark : ThemeMode.light);
 							}
 						),
 					],

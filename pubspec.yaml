@@ -7,10 +7,14 @@ environment:
   sdk: '>=3.1.2 <4.0.0'
 
 dependencies:
+  change_app_package_name: ^1.1.0
   flutter:
     sdk: flutter
+  html: ^0.15.4
   http: ^1.1.0
+  path: ^1.8.3
   path_provider: ^2.1.1
+  permission_handler: ^11.0.1
   provider: ^6.0.5
 
 dev_dependencies:
