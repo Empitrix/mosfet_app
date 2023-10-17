@@ -30,9 +30,9 @@ Future<void> initializeLoading() async {
 		return;
 	}
 
-	if(await Permission.manageExternalStorage.request().isGranted){
-		localDbPath = p.join(Directory('/storage/emulated/0/Android/data/com.mosfet.tech.news/files')
-			.absolute.path, "db.json");
+	// if(await Permission.manageExternalStorage.request().isGranted){
+	if(await Permission.storage.request().isGranted){
+		localDbPath = p.join((await getApplicationSupportDirectory()).absolute.path, "db.json");
 	} else {
 		openAppSettings();
 	}

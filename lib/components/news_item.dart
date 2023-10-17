@@ -92,7 +92,7 @@ class NewsItem extends StatelessWidget {
 							crossAxisAlignment: CrossAxisAlignment.center,
 							children: [
 								SizedBox(
-									// height: 250,
+									height: 250,
 									// width: 700,
 									child: CachedNetworkImage(
 										imageUrl: news.img,
@@ -112,12 +112,15 @@ class NewsItem extends StatelessWidget {
 												children: [Text(text), const SizedBox(height: 5)]
 											),
 											const SizedBox(height: 20),
-											for(String link in news.links) TextButton(
-												style: ButtonStyle(shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-													borderRadius: BorderRadius.circular(5)
-												))),
-												onPressed: () async => await openCustomURL(link),
-												child: Text(link)
+											for(String link in news.links) SizedBox(
+												height: 35,
+												child: TextButton(
+													style: ButtonStyle(shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+														borderRadius: BorderRadius.circular(5)
+													))),
+													onPressed: () async => await openCustomURL(link),
+													child: Text(link)
+												),
 											),
 										],
 									)
