@@ -4,8 +4,8 @@ import 'package:mosfet/models/news.dart';
 
 class NewsItem extends StatelessWidget {
 	final News news;
-	final Function update;
-	const NewsItem({super.key, required this.news, required this.update});
+	final Function setState;
+	const NewsItem({super.key, required this.news, required this.setState});
 
 	@override
 	Widget build(BuildContext context) {
@@ -36,7 +36,12 @@ class NewsItem extends StatelessWidget {
 							children: [
 								const SizedBox(width: 20),
 								Expanded(
-									child: Text("${news.date.toUpperCase()} | ${news.topic.toUpperCase()}")
+									child: Text(
+										"${news.date.toUpperCase()} | ${news.topic.toUpperCase()}",
+										style: TextStyle(
+											color: Theme.of(context).colorScheme.inverseSurface.withOpacity(0.8)
+										),
+									)
 								)
 							],
 						)
@@ -45,18 +50,9 @@ class NewsItem extends StatelessWidget {
 			),
 
 			onTap: (){
-				news.isSeen = !news.isSeen;
-				update((){});
+				setState((){});
 			},
 		);
-		/*
-		return ListTile(
-			leading: const Icon(Icons.circle, size: 10),
-			title: Text(news.title, style: const TextStyle(
-				fontFamily: "TitilliumWebSemiBold", fontSize: 22)),
-			subtitle: Text("${news.date.toUpperCase()} | ${news.topic.toUpperCase()}"),
-			onTap: (){},
-		);
-		*/
+
 	}
 }

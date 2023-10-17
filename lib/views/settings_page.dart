@@ -52,11 +52,14 @@ class _SettingsPageState extends State<SettingsPage> {
 							icon: const Icon(Icons.dark_mode),
 							value: dMode,
 							onChange: (bool value){
-								setState(() {dMode = value;});
 								Provider.of<ProviderManager>(context, listen: false).changeTheme(
-									dMode ? ThemeMode.dark : ThemeMode.light);
+									value ? ThemeMode.dark : ThemeMode.light);
 								// Update on database
-								database.updateTheme(dMode ? ThemeMode.dark : ThemeMode.light);
+								database.updateTheme(value ? ThemeMode.dark : ThemeMode.light);
+								Future.microtask((){
+									print("called !");
+									setState(() { dMode = value; });
+								});
 							}
 						),
 					],

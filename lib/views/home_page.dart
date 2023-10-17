@@ -27,29 +27,13 @@ class _HomePageState extends State<HomePage> {
 	List<News> news = [];
 
 
-	void _updateNews({required List<News> all, required List<String> topics}){
+	Future<void> _updateNews({required List<News> all, required List<String> topics}) async {
 		List<News> dummyList = [];
 		for(News paper in all){
 			if(!topics.any((t) => vStr(t) == vStr(paper.topic))){
 				dummyList.add(paper);
 			}
 		}
-		setState(() { news = dummyList; });
-	}
-
-
-	Future<void> initialize() async {
-		setState(() { isLoaded = false; });
-
-		await initializeLoading();
-		database.init();
-		Loaded loaded = loadAllContents();
-		if(mounted) Provider.of<ProviderManager>(context, listen: false).changeTheme(loaded.themeMode);
-		setState(() {
-			dMode = loaded.themeMode == ThemeMode.dark;
-			news = loaded.news;
-		});
-		_updateNews(all: loaded.news, topics: loaded.bannedTopics);
 
 		NewsManifest manifest = await NewsClient.news();
 
@@ -64,6 +48,22 @@ class _HomePageState extends State<HomePage> {
 
 		}
 
+		// setState(() { news = dummyList; });
+	}
+
+
+	Future<void> initialize() async {
+		setState(() { isLoaded = false; });
+
+		await initializeLoading();
+		database.init();
+		Loaded loaded = loadAllContents();
+		if(mounted) Provider.of<ProviderManager>(context, listen: false).changeTheme(loaded.themeMode);
+		setState(() {
+			dMode = loaded.themeMode == ThemeMode.dark;
+			news = loaded.news;
+		});
+		await _updateNews(all: loaded.news, topics: loaded.bannedTopics);
 		setState(() { isLoaded = true; });
 	}
 
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
 				body: isLoaded ? ListView.builder(
 					itemCount: news.length,
 					itemBuilder: (BuildContext context, int index) => NewsItem(
-						news: news[index], update: setState),
+						news: news[index], setState: setState),
 				): const ShimmerView(),
 			),
 		);
