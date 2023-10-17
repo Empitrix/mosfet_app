@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mosfet/animations/expand.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/client/client.dart';
 import 'package:mosfet/components/news_item.dart';
@@ -19,7 +20,7 @@ class HomePage extends StatefulWidget {
 	State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
 	GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 	bool isLoaded = false;
@@ -29,6 +30,8 @@ class _HomePageState extends State<HomePage> {
 
 	Future<void> _updateNews({required List<News> all, required List<String> topics}) async {
 		List<News> dummyList = [];
+		List<News> actualNews = [];
+
 		for(News paper in all){
 			if(!topics.any((t) => vStr(t) == vStr(paper.topic))){
 				dummyList.add(paper);
@@ -42,8 +45,17 @@ class _HomePageState extends State<HomePage> {
 			else if(manifest.statusCode == -2){ /*Something Happened*/ }
 		} else {
 
+			// Set Animations
+			for(News current in manifest.news!){
+				current.animation = generateLinearAnimation(
+					ticket: this, initialValue: 0, durations: [250]);
+
+				actualNews.add(current);
+			}
+
+
 			setState(() {
-				news = manifest.news!;
+				news = actualNews;
 			});
 
 		}

@@ -1,4 +1,6 @@
+import 'package:mosfet/animations/expand.dart';
 import 'package:mosfet/backend/backend.dart';
+import 'package:flutter/material.dart';
 
 class News {
 	final String title;
@@ -10,6 +12,11 @@ class News {
 	final List<String> links;
 	late bool isSeen;
 
+	// Animation
+	late GeneratedAnimation? animation;
+	// late Animation<double>? animation;
+	// late AnimationController? controller;
+
 	News({
 		required this.title,
 		required this.topic,
@@ -18,7 +25,8 @@ class News {
 		required this.date,
 		required this.texts,
 		required this.links,
-		required this.isSeen
+		required this.isSeen,
+		this.animation,
 	});
 
 	toJson(){
