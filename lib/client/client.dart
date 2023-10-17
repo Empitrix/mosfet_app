@@ -16,7 +16,7 @@ Status code explain
 
 class NewsManifest{
 	final int statusCode;
-	final List<News>? news;
+	late List<News>? news;
 
 	NewsManifest({required this.statusCode, required this.news});
 }

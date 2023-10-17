@@ -28,15 +28,32 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 	List<News> news = [];
 
 
-	Future<void> _updateNews({required List<News> all, required List<String> topics}) async {
-		List<News> dummyList = [];
+	List<News> _initializeAnimations(List<News> input){
 		List<News> actualNews = [];
+		for(News current in input){
+			current.animation = generateLinearAnimation(
+				ticket: this, initialValue: 0, durations: [250]);
+			actualNews.add(current);
+		}
+		return actualNews;
+	}
+
+	Future<void> _updateNews({required List<News> all, required List<String> topics}) async {
+		setState(() { isLoaded = false; });
+		List<News> dummyList = [];
 
 		for(News paper in all){
 			if(!topics.any((t) => vStr(t) == vStr(paper.topic))){
 				dummyList.add(paper);
 			}
 		}
+		dummyList = _initializeAnimations(dummyList);
+
+		setState(() {
+			news = dummyList;
+			isLoaded = true;
+		});
+
 
 		NewsManifest manifest = await NewsClient.news();
 
@@ -45,28 +62,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 			else if(manifest.statusCode == -2){ /*Something Happened*/ }
 		} else {
 
-			// Set Animations
-			for(News current in manifest.news!){
-				current.animation = generateLinearAnimation(
-					ticket: this, initialValue: 0, durations: [250]);
-
-				actualNews.add(current);
+			List<News> updated = [];
+			for(int i = 0; i < dummyList.length; i++){
+				for(int j = 0; j < manifest.news!.length; j++){
+					if(dummyList[i].isEqual(manifest.news![j])){
+						// Check for banned topics
+						if(!topics.any((t) => vStr(t) == vStr(manifest.news![j].topic))){
+							// manifest.news![j] = dummyList[i];
+							updated.add(dummyList[i]);
+						}
+					}
+				}
 			}
+			// Added loaded items to database
+			database.addAllNews(updated);
+			// Set Animations
+			updated = _initializeAnimations(updated);
 
-
-			setState(() {
-				news = actualNews;
-			});
-
+			setState(() { news = updated; });
 		}
-
-		// setState(() { news = dummyList; });
 	}
 
 
 	Future<void> initialize() async {
-		setState(() { isLoaded = false; });
-
 		await initializeLoading();
 		database.init();
 		Loaded loaded = loadAllContents();
@@ -76,7 +94,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 			news = loaded.news;
 		});
 		await _updateNews(all: loaded.news, topics: loaded.bannedTopics);
-		setState(() { isLoaded = true; });
+		// setState(() { isLoaded = true; });
 	}
 
 
