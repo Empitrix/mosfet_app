@@ -51,7 +51,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
 		setState(() {
 			news = dummyList;
-			isLoaded = true;
+			if(dummyList.isNotEmpty){
+				isLoaded = true;
+			}
 		});
 
 
@@ -63,23 +65,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 		} else {
 
 			List<News> updated = [];
-			for(int i = 0; i < dummyList.length; i++){
-				for(int j = 0; j < manifest.news!.length; j++){
-					if(dummyList[i].isEqual(manifest.news![j])){
-						// Check for banned topics
-						if(!topics.any((t) => vStr(t) == vStr(manifest.news![j].topic))){
-							// manifest.news![j] = dummyList[i];
-							updated.add(dummyList[i]);
+			if(dummyList.isNotEmpty){
+				for(int i = 0; i < dummyList.length; i++){
+					for(int j = 0; j < manifest.news!.length; j++){
+						if(dummyList[i].isEqual(manifest.news![j])){
+							// Check for banned topics
+							if(!topics.any((t) => vStr(t) == vStr(manifest.news![j].topic))){
+								// manifest.news![j] = dummyList[i];
+								updated.add(dummyList[i]);
+							}
 						}
 					}
 				}
+			} else {
+				updated = manifest.news!;
 			}
 			// Added loaded items to database
 			database.addAllNews(updated);
 			// Set Animations
 			updated = _initializeAnimations(updated);
-
-			setState(() { news = updated; });
+			setState(() { news = updated; isLoaded = true; });
 		}
 	}
 
