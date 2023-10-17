@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mosfet/animations/expand.dart';
+import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/models/news.dart';
 
 
@@ -84,10 +86,44 @@ class NewsItem extends StatelessWidget {
 					animation: news.animation!.animation,
 					mode: ExpandMode.height,
 					body: Container(
+						constraints: const BoxConstraints(maxWidth: 700),
 						margin: const EdgeInsets.all(12),
 						child: Column(
+							crossAxisAlignment: CrossAxisAlignment.center,
 							children: [
-								for(int i = 0; i < 10; i++) Text("No.${i + 1}")
+								SizedBox(
+									// height: 250,
+									// width: 700,
+									child: CachedNetworkImage(
+										imageUrl: news.img,
+										placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+										errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
+									),
+								),
+								const SizedBox(height: 12),
+								SizedBox(
+									width: double.infinity,
+									child: Column(
+										crossAxisAlignment: CrossAxisAlignment.start,
+										children: [
+											for(String text in news.texts) Column(
+												crossAxisAlignment: CrossAxisAlignment.start,
+												mainAxisAlignment: MainAxisAlignment.start,
+												children: [Text(text), const SizedBox(height: 5)]
+											),
+											const SizedBox(height: 20),
+											for(String link in news.links) TextButton(
+												style: ButtonStyle(shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+													borderRadius: BorderRadius.circular(5)
+												))),
+												onPressed: () async => await openCustomURL(link),
+												child: Text(link)
+											),
+										],
+									)
+								)
+
+
 							],
 						),
 					)

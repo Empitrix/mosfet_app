@@ -104,10 +104,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 						},
 					),
 				),
-				body: isLoaded ? ListView.builder(
-					itemCount: news.length,
-					itemBuilder: (BuildContext context, int index) => NewsItem(
-						news: news[index], setState: setState, index: index, all: news),
+				body: isLoaded ? SelectionArea(
+					child: ListView.builder(
+						itemCount: news.length,
+						itemBuilder: (BuildContext context, int index) => NewsItem(
+							news: news[index], setState: setState, index: index, all: news),
+					),
 				): const ShimmerView(),
 			),
 		);

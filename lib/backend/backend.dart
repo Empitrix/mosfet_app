@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 String vStr(String input){
 	/* Valid String */
@@ -29,3 +30,9 @@ String getFormattedCurrentDate(){
 }
 
 
+
+Future<void> openCustomURL(String url) async {
+	if (!await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication)) {
+		throw Exception('Could not launch $url');
+	}
+}
