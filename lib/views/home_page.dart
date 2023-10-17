@@ -31,8 +31,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 	List<News> _initializeAnimations(List<News> input){
 		List<News> actualNews = [];
 		for(News current in input){
-			current.animation = generateLinearAnimation(
-				ticket: this, initialValue: 0, durations: [250]);
+			current.animation ??= generateLinearAnimation(
+					ticket: this, initialValue: 0, durations: [250]);
 			actualNews.add(current);
 		}
 		return actualNews;

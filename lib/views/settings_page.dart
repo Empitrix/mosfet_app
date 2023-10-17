@@ -57,7 +57,6 @@ class _SettingsPageState extends State<SettingsPage> {
 								// Update on database
 								database.updateTheme(value ? ThemeMode.dark : ThemeMode.light);
 								Future.microtask((){
-									print("called !");
 									setState(() { dMode = value; });
 								});
 							}

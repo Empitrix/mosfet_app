@@ -49,7 +49,7 @@ class NewsItem extends StatelessWidget {
 										const SizedBox(width: 10),
 										Expanded(
 											child: Text(news.title, style: const TextStyle(
-												fontFamily: "TitilliumWebSemiBold", fontSize: 22)),
+												fontFamily: "TitilliumWebSemiBold", fontSize: 20)),
 										)
 									],
 								),
@@ -113,13 +113,22 @@ class NewsItem extends StatelessWidget {
 											),
 											const SizedBox(height: 20),
 											for(String link in news.links) SizedBox(
-												height: 35,
+												height: 25,
 												child: TextButton(
-													style: ButtonStyle(shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-														borderRadius: BorderRadius.circular(5)
-													))),
-													onPressed: () async => await openCustomURL(link),
-													child: Text(link)
+
+													style: ButtonStyle(
+														padding: const MaterialStatePropertyAll(
+															EdgeInsets.only(right: 5, left: 5)),
+														shape: MaterialStatePropertyAll(
+															RoundedRectangleBorder(
+																borderRadius: BorderRadius.circular(5)
+															)
+														)
+													),
+													onPressed: () async => await openCustomURL(link.trim()),
+													child: RichText(text: TextSpan(text: link, style: TextStyle(
+														color: Theme.of(context).colorScheme.primary
+													)))
 												),
 											),
 										],
