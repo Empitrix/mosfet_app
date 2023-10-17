@@ -57,8 +57,9 @@ class Database {
 	void editNews(News old, News newItem){
 		Map data = office.read();
 		for(int i = 0; i < data["news"].length; i++){
-			if(old.isEqual(News.toNews(data["news"][i])));
-			data["news"][i] = newItem.toJson();
+			if(old.isEqual(News.toNews(data["news"][i]))){
+				data["news"][i] = newItem.toJson();
+			}
 		}
 		office.write(data);
 	}
