@@ -5,12 +5,18 @@ import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/models/news.dart';
 
 
-void _openFooter({required List<News> all, required int index}){
+void _openFooter({
+	required List<News> all, required int index}) async {
 	for(News n in all){
 		n.animation!.controller.reverse();
 	}
 	if(all[index].animation!.controller.value == 0){
-		all[index].animation!.controller.forward();
+		await all[index].animation!.controller.forward();
+		Scrollable.ensureVisible(
+			all[index].key!.currentContext!,
+			duration: const Duration(milliseconds: 250),
+			alignment: 0
+		);
 	} else {
 		all[index].animation!.controller.reverse();
 	}
@@ -112,13 +118,14 @@ class NewsItem extends StatelessWidget {
 												children: [Text(text), const SizedBox(height: 5)]
 											),
 											const SizedBox(height: 20),
-											for(String link in news.links) SizedBox(
-												height: 25,
+											for(String link in news.links) Container(
+												margin: EdgeInsets.zero,
+												padding: EdgeInsets.zero,
+												height: 22,
 												child: TextButton(
-
 													style: ButtonStyle(
 														padding: const MaterialStatePropertyAll(
-															EdgeInsets.only(right: 5, left: 5)),
+															EdgeInsets.only(right: 5, left: 5, top: 2, bottom: 2)),
 														shape: MaterialStatePropertyAll(
 															RoundedRectangleBorder(
 																borderRadius: BorderRadius.circular(5)
@@ -127,10 +134,13 @@ class NewsItem extends StatelessWidget {
 													),
 													onPressed: () async => await openCustomURL(link.trim()),
 													child: RichText(text: TextSpan(text: link, style: TextStyle(
-														color: Theme.of(context).colorScheme.primary
-													)))
-												),
+														color: Theme.of(context).colorScheme.primary,
+														overflow: TextOverflow.ellipsis
+													))),
+												)
 											),
+
+
 										],
 									)
 								)

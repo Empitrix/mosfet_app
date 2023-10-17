@@ -15,6 +15,7 @@ class News {
 
 	// Animation
 	late GeneratedAnimation? animation;
+	late GlobalKey? key;
 	// late Animation<double>? animation;
 	// late AnimationController? controller;
 
@@ -28,6 +29,7 @@ class News {
 		required this.links,
 		required this.isSeen,
 		this.animation,
+		this.key
 	});
 
 	toJson(){
@@ -63,7 +65,8 @@ class News {
 			vStr(input.topic) == vStr(topic) &&
 			vStr(input.source) == vStr(source) &&
 			vStr(input.date) == vStr(date) &&
-			vStr(input.img) == vStr(img)
+			vStr(input.img) == vStr(img) /*&&
+			input.key == key*/
 		){
 			return true;
 		}

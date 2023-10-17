@@ -33,8 +33,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 		for(News current in input){
 			current.animation ??= generateLinearAnimation(
 					ticket: this, initialValue: 0, durations: [250]);
+			// Add Key
+			current.key = GlobalKey();
 			actualNews.add(current);
 		}
+		// print(actualNews[0].key);
 		return actualNews;
 	}
 
@@ -96,7 +99,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 		if(mounted) Provider.of<ProviderManager>(context, listen: false).changeTheme(loaded.themeMode);
 		setState(() {
 			dMode = loaded.themeMode == ThemeMode.dark;
-			news = loaded.news;
+			// news = loaded.news;
 		});
 		await _updateNews(all: loaded.news, topics: loaded.bannedTopics);
 		// setState(() { isLoaded = true; });
@@ -131,7 +134,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 					child: ListView.builder(
 						itemCount: news.length,
 						itemBuilder: (BuildContext context, int index) => NewsItem(
-							news: news[index], setState: setState, index: index, all: news),
+							news: news[index], setState: setState, index: index, all: news, key: news[index].key),
 					),
 				): const ShimmerView(),
 			),
