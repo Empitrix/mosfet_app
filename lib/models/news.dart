@@ -1,6 +1,7 @@
 import 'package:mosfet/animations/expand.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:flutter/material.dart';
+import 'package:mosfet/database/database.dart';
 
 class News {
 	final String title;
@@ -67,6 +68,14 @@ class News {
 			return true;
 		}
 		return false;
+	}
+
+
+	void setToSeen(){
+		Database db = Database();
+		News newNews = this;
+		newNews.isSeen = true;
+		db.editNews(this, newNews);
 	}
 
 }
