@@ -26,10 +26,10 @@ class _DrawerPageState extends State<DrawerPage> {
 		return Drawer(
 			shape: RoundedRectangleBorder(
 				borderRadius: BorderRadius.only(
-					topRight: Radius.zero,
-					bottomRight: Radius.zero,
-					topLeft: Radius.circular(roundness),
-					bottomLeft: Radius.circular(roundness)
+					topLeft: Radius.zero,
+					bottomLeft: Radius.zero,
+					topRight: Radius.circular(roundness),
+					bottomRight: Radius.circular(roundness)
 				)
 			),
 			child: Scaffold(

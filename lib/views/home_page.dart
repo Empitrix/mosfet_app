@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mosfet/backend/backend.dart';
+import 'package:mosfet/client/client.dart';
+import 'package:mosfet/components/shimmer_view.dart';
 import 'package:mosfet/config/provider_manager.dart';
 import 'package:mosfet/config/public.dart';
 import 'package:mosfet/database/database.dart';
@@ -47,6 +49,20 @@ class _HomePageState extends State<HomePage> {
 			news = loaded.news;
 		});
 		_updateNews(all: loaded.news, topics: loaded.bannedTopics);
+
+		NewsManifest manifest = await NewsClient.news();
+
+		if(manifest.statusCode != 0){
+			if(manifest.statusCode == -1){ /*Internet connection*/ }
+			else if(manifest.statusCode == -2){ /*Something Happened*/ }
+		} else {
+
+			setState(() {
+				news = manifest.news!;
+			});
+
+		}
+
 		setState(() { isLoaded = true; });
 	}
 
@@ -75,8 +91,12 @@ class _HomePageState extends State<HomePage> {
 						},
 					),
 				),
-				body: isLoaded ? const Center(child: Text("Mosfet!")):
-					const Center(child: CircularProgressIndicator()),
+				body: isLoaded ? ListView.builder(
+					itemCount: news.length,
+					itemBuilder: (BuildContext context, int index) => ListTile(
+						title: Text(news[index].title),
+					),
+				): const ShimmerView(),
 			),
 		);
 	}
