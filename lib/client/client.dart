@@ -65,7 +65,8 @@ class NewsClient {
 
 		for(List single in extractedChildren){
 			Map thisNews = {
-				"title": "", "topic": "", "source": "", "img": "", "date": "", "texts": [], "links": []
+				"title": "", "topic": "", "source": "",
+				"img": "", "date": "", "texts": [], "links": [], "isSeen": false
 			};
 
 			for(Map cursor in single){

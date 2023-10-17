@@ -8,6 +8,7 @@ class News {
 	final String date;
 	final List<String> texts;
 	final List<String> links;
+	late bool isSeen;
 
 	News({
 		required this.title,
@@ -16,7 +17,8 @@ class News {
 		required this.img,
 		required this.date,
 		required this.texts,
-		required this.links
+		required this.links,
+		required this.isSeen
 	});
 
 	toJson(){
@@ -27,7 +29,8 @@ class News {
 			"img": img,
 			"date": date,
 			"texts": texts,
-			"links": links
+			"links": links,
+			"isSeen": isSeen
 		};
 	}
 
@@ -39,7 +42,8 @@ class News {
 			img: input["img"],
 			date: input["date"],
 			texts: List<String>.from(input["texts"]),
-			links: List<String>.from(input["links"])
+			links: List<String>.from(input["links"]),
+			isSeen: input["isSeen"]
 		);
 	}
 

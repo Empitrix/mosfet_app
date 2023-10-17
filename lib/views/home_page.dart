@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/client/client.dart';
+import 'package:mosfet/components/news_item.dart';
 import 'package:mosfet/components/shimmer_view.dart';
 import 'package:mosfet/config/provider_manager.dart';
 import 'package:mosfet/config/public.dart';
@@ -93,9 +94,8 @@ class _HomePageState extends State<HomePage> {
 				),
 				body: isLoaded ? ListView.builder(
 					itemCount: news.length,
-					itemBuilder: (BuildContext context, int index) => ListTile(
-						title: Text(news[index].title),
-					),
+					itemBuilder: (BuildContext context, int index) => NewsItem(
+						news: news[index], update: setState),
 				): const ShimmerView(),
 			),
 		);
