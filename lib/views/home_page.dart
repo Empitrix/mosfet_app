@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mosfet/animations/expand.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/client/client.dart';
@@ -130,7 +131,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
 				appBar: AppBar(
 					automaticallyImplyLeading: false,
-					title: const Text("News"),
+					// title: const Text("MOSFET"),
+					title: Container(
+						margin: const EdgeInsets.only(top: 5, bottom: 5),
+						child: SvgPicture.asset(
+							"assets/svg/icon.svg",
+							height: 45,
+							width: 45,
+							// ignore: deprecated_member_use
+							color: Theme.of(context).colorScheme.inverseSurface,
+						),
+					),
+					centerTitle: true,
 					leading: IconButton(
 						icon: const Icon(Icons.menu),
 						onPressed: (){
