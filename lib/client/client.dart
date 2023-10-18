@@ -8,7 +8,8 @@ import 'package:mosfet/models/news.dart';
 Status code explain
 0 : all fine
 -1: Internet connection
--2: Connection failed
+-2: Something wrong
+-3: Connection failed
 */
 
 
@@ -28,8 +29,13 @@ class NewsClient {
 		if(!await InternetConnectionChecker().hasConnection){
 			return NewsManifest(statusCode: -1, news: null);}
 
+		http.Response? response;
 		// Get data from internet
-		http.Response response = await http.get(Uri.parse("https://mosfet.net"));
+		try{
+			response = await http.get(Uri.parse("https://mosfet.net"));
+		} catch(e){
+			return NewsManifest(statusCode: -3, news: null);
+		}
 
 		if(response.statusCode != 200){
 			return NewsManifest(statusCode: -2, news: null);}

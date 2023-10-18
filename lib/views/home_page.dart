@@ -64,22 +64,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
 		if(manifest.statusCode != 0){
 			if(manifest.statusCode == -1){ /*Internet connection*/ }
-			else if(manifest.statusCode == -2){ /*Something Happened*/ }
+			else if(manifest.statusCode == -2){ /*Something Wrong*/ }
+			else if(manifest.statusCode == -3){ /*Connection Failed*/ }
 		} else {
 
 			List<News> updated = [];
 			if(dummyList.isNotEmpty){
-				for(int i = 0; i < dummyList.length; i++){
-					for(int j = 0; j < manifest.news!.length; j++){
-						if(dummyList[i].isEqual(manifest.news![j])){
-							// Check for banned topics
-							if(!topics.any((t) => vStr(t) == vStr(manifest.news![j].topic))){
-								// manifest.news![j] = dummyList[i];
-								updated.add(dummyList[i]);
+				for(int i = 0; i < manifest.news!.length; i++){
+					if(dummyList.any((n) => n.isEqual(manifest.news![i]))){
+
+						for(int j = 0; j < dummyList.length; j++){
+							if(dummyList[j].isEqual(manifest.news![i])){
+								// Check for banned topics
+								if(!topics.any((t) => vStr(t) == vStr(manifest.news![i].topic))){
+									updated.add(dummyList[j]);
+								}
 							}
 						}
+
+					} else {
+						updated.add(manifest.news![i]);
 					}
 				}
+
 			} else {
 				updated = manifest.news!;
 			}
@@ -103,6 +110,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 		});
 		await _updateNews(all: loaded.news, topics: loaded.bannedTopics);
 		// setState(() { isLoaded = true; });
+		debugPrint("[ NEWS ARE LOADED ]");
 	}
 
 
