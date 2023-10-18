@@ -60,14 +60,24 @@ class _DrawerPageState extends State<DrawerPage> {
 											// ignore: deprecated_member_use
 											color: Theme.of(context).colorScheme.inverseSurface,
 										),
-										const SizedBox(width: 5),
-										Expanded(
-											child: Text(
-												"Keeping you up to date with technological change.",
-												style: TextStyle(
-													fontWeight: FontWeight.bold
-												),
-											),
+										const SizedBox(width: 12),
+										const Expanded(
+											child: Column(
+												crossAxisAlignment: CrossAxisAlignment.start,
+												children: [
+													Text(
+														"MOSFET",
+														style: TextStyle(fontSize: 35, fontFamily: "TitilliumWebSemiBold"),
+													),
+													Text(
+														// "Keeping you up to date with technological change.",
+														"Simple Tech News Update",
+														style: TextStyle(
+															fontWeight: FontWeight.bold
+														),
+													),
+												],
+											)
 										)
 									],
 								)
@@ -100,7 +110,17 @@ class _DrawerPageState extends State<DrawerPage> {
 								closeDrawer();
 
 							},
+						),
+
+						ListTile(
+							title: const Text("About"),
+							leading: const Icon(Icons.info),
+							onTap: (){
+								closeDrawer();
+
+							},
 						)
+
 
 
 					],

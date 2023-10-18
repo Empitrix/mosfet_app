@@ -64,7 +64,8 @@ class NewsItem extends StatelessWidget {
 										const SizedBox(width: 20),
 										Expanded(
 											child: Text(
-												"${news.date.toUpperCase()} | ${news.topic.toUpperCase()}",
+												"${vStr(news.date) == vStr(getFormattedCurrentDate()) ?
+													"TODAY" : news.date.toUpperCase()} | ${news.topic.toUpperCase()}",
 												style: TextStyle(
 													color: Theme.of(context).colorScheme.inverseSurface.withOpacity(0.8)
 												),
@@ -105,6 +106,25 @@ class NewsItem extends StatelessWidget {
 										placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
 										errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
 									),
+								),
+								Row(
+									mainAxisAlignment: MainAxisAlignment.spaceBetween,
+									children: [
+										Expanded(
+											child: Text(news.source, style: const TextStyle(fontWeight: FontWeight.bold)),
+										),
+										// SizedBox(
+										// 	height: 10,
+										// 	child: Transform.scale(
+										// 		scale: 0.6,
+										// 		child: Switch(
+										// 			value: true,
+										// 			onChanged: (bool? value){},
+										// 		),
+										// 	),
+										// )
+
+									],
 								),
 								const SizedBox(height: 12),
 								SizedBox(

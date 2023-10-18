@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 				key: scaffoldKey,
 				drawer: DrawerPage(scaffoldKey: scaffoldKey),
 
-				appBar: AppBar(
+				/*appBar: AppBar(
 					automaticallyImplyLeading: false,
 					// title: const Text("MOSFET"),
 					title: Container(
@@ -149,14 +149,46 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 							if(scaffoldKey.currentState != null){ scaffoldKey.currentState!.openDrawer(); }
 						},
 					),
-				),
-				body: isLoaded ? SelectionArea(
-					child: ListView.builder(
-						itemCount: news.length,
-						itemBuilder: (BuildContext context, int index) => NewsItem(
-							news: news[index], setState: setState, index: index, all: news, key: news[index].key),
-					),
-				): const ShimmerView(),
+				),*/
+				body: NestedScrollView(
+					headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+						return [
+							SliverAppBar(
+								centerTitle: true,
+								leading: IconButton(
+									icon: const Icon(Icons.menu),
+									onPressed: (){
+										if(scaffoldKey.currentState != null){ scaffoldKey.currentState!.openDrawer(); }
+									},
+								),
+								title: Container(
+									margin: const EdgeInsets.only(top: 5, bottom: 5),
+									child: SvgPicture.asset(
+										"assets/svg/icon.svg",
+										height: 45,
+										width: 45,
+										// ignore: deprecated_member_use
+										color: Theme.of(context).colorScheme.inverseSurface,
+									),
+								),
+								elevation: 10.0,
+								automaticallyImplyLeading: false,
+								expandedHeight: 50,
+								floating: true,
+								snap: true,
+							)
+						];
+					},
+
+					body: isLoaded ? SelectionArea(
+						child: ListView.builder(
+							padding: const EdgeInsets.only(top: 5),
+							itemCount: news.length,
+							itemBuilder: (BuildContext context, int index) => NewsItem(
+								news: news[index], setState: setState, index: index, all: news, key: news[index].key),
+						),
+					): const ShimmerView(),
+				)
 			),
 		);
 	}
