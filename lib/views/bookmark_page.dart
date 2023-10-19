@@ -24,7 +24,7 @@ class _BookmarkPageState extends State<BookmarkPage> with TickerProviderStateMix
 		dbList = database.allBookmarks();
 
 		setState(() {
-			bookedItems = initializeAnimations(dbList, this);
+			bookedItems = initializeAnimations(dbList, [], this);
 		});
 	}
 	

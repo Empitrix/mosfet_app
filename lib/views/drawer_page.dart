@@ -8,7 +8,8 @@ import 'package:mosfet/views/settings_page.dart';
 
 class DrawerPage extends StatefulWidget {
 	final GlobalKey<ScaffoldState> scaffoldKey;
-	const DrawerPage({super.key, required this.scaffoldKey});
+	final Function onLoad;
+	const DrawerPage({super.key, required this.scaffoldKey, required this.onLoad});
 
 	@override
 	State<DrawerPage> createState() => _DrawerPageState();
@@ -110,7 +111,7 @@ class _DrawerPageState extends State<DrawerPage> {
 							leading: const Icon(Icons.cancel_presentation),
 							onTap: (){
 								closeDrawer();
-								changeView(context, const BannedTopicPage(), isPush: true);
+								changeView(context, BannedTopicPage(onLoad: widget.onLoad), isPush: true);
 							},
 						),
 

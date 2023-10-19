@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/client/client.dart';
 import 'package:mosfet/components/alerts.dart';
 import 'package:mosfet/components/news_item.dart';
@@ -30,68 +29,62 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 	Database database = Database();
 	List<News> news = [];
 
-	Future<void> _updateNews({required List<News> all, required List<BannedTopic> topics}) async {
+	Future<void> _updateNews({
+		required List<News> all, required List<BannedTopic> topics, required bool soft}) async {
+
 		setState(() { isLoaded = false; });
-		// List<News> dbList = [];
 		SNK snk = SNK(context);
 
-		// for(News paper in all){
-		// 	if(!topics.any((t) => vStr(t.name) == vStr(paper.topic))){
-		// 		print("yews");
-		// 		dbList.add(paper);
-		// 	}
-		// }
-
 		setState(() {
-			news = initializeAnimations(all, this);
+			news = initializeAnimations(all, topics, this);
 			if(topics.isNotEmpty){
 				isLoaded = true;
 			}
 		});
 
+		if(!soft){
 
-		NewsManifest manifest = await MosfetClient.news();
+			NewsManifest manifest = await MosfetClient.news();
 
-		if(manifest.statusCode != 0){
-			snk.failed(message: manifest.msg);
-		} else {
-			List<News> updated = [];
-			if(all.isNotEmpty){
-				for(int i = 0; i < manifest.news!.length; i++){
-					if(all.any((n) => n.isEqual(manifest.news![i]))){
-						for(int j = 0; j < all.length; j++){
-							if(all[j].isEqual(manifest.news![i])){
-								// Check for banned topics
-								// if(!topics.any((t) => vStr(t.name) == vStr(manifest.news![i].topic))){
-								//
-								// }
-								updated.add(all[j]);
-							}
-						}
-					} else { updated.add(manifest.news![i]); }  // Add the new message
-				}
+			if(manifest.statusCode != 0){
+				snk.failed(message: manifest.msg);
 			} else {
-				print("Called !");
-				updated = manifest.news!;
-			}  // First time news
+				List<News> updated = [];
+				if(all.isNotEmpty){
+					for(int i = 0; i < manifest.news!.length; i++){
+						if(all.any((n) => n.isEqual(manifest.news![i]))){
+							for(int j = 0; j < all.length; j++){
+								if(all[j].isEqual(manifest.news![i])){
+									updated.add(all[j]);
+								}
+							}
+						} else {
+							updated.add(manifest.news![i]);
+						}  // Add the new message
+					}
+				} else {
+					updated = manifest.news!;
+				}  // First time news
 
-			print("N len: ${updated.length}");
+				database.addAllNews(updated);  // Added loaded items to database
 
-			database.addAllNews(updated);  // Added loaded items to database
+				setState(() { news = initializeAnimations(updated, topics, this); isLoaded = true; });
 
-			setState(() { news = initializeAnimations(updated, this); isLoaded = true; });
+			}
+
 		}
 	}
 
 
-	Future<void> initialize() async {
-		await initializeLoading();
-		database.init();
+	Future<void> initialize([bool soft = false]) async {
+		if(!soft){
+			await initializeLoading();
+			database.init();
+		}
 		Loaded loaded = loadAllContents();
 		if(mounted) Provider.of<ProviderManager>(context, listen: false).changeTheme(loaded.themeMode);
 		setState(() { dMode = loaded.themeMode == ThemeMode.dark; });
-		print("B Len: ${loaded.bannedTopics.length}");
-		await _updateNews(all: loaded.news, topics: loaded.bannedTopics);
+		await _updateNews(all: loaded.news, topics: loaded.bannedTopics, soft: soft);
 		debugPrint("[ NEWS ARE LOADED ]");
 	}
 
@@ -108,7 +101,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 			onWillPop: () async { SystemNavigator.pop(animated: true); return false; },
 			child: Scaffold(
 				key: scaffoldKey,
-				drawer: DrawerPage(scaffoldKey: scaffoldKey),
+				drawer: DrawerPage(scaffoldKey: scaffoldKey, onLoad: (){initialize(true);}),
 
 				appBar: AppBar(
 					automaticallyImplyLeading: false,

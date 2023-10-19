@@ -9,7 +9,8 @@ import 'package:mosfet/views/home_page.dart';
 
 
 class BannedTopicPage extends StatefulWidget {
-	const BannedTopicPage({super.key});
+	final Function onLoad;
+	const BannedTopicPage({super.key, required this.onLoad});
 
 	@override
 	State<BannedTopicPage> createState() => _BannedTopicPageState();
@@ -102,6 +103,7 @@ class _BannedTopicPageState extends State<BannedTopicPage> {
 										database.toggleTopic(topicList[index]);
 										topicList[index].isBanned = !topicList[index].isBanned;
 									});
+									widget.onLoad();
 								},
 							),
 						)
