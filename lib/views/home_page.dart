@@ -9,6 +9,7 @@ import 'package:mosfet/components/shimmer_view.dart';
 import 'package:mosfet/config/provider_manager.dart';
 import 'package:mosfet/config/public.dart';
 import 'package:mosfet/database/database.dart';
+import 'package:mosfet/models/banned_topic.dart';
 import 'package:mosfet/models/news.dart';
 import 'package:mosfet/utils/init.dart';
 import 'package:mosfet/utils/loading.dart';
@@ -29,48 +30,55 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 	Database database = Database();
 	List<News> news = [];
 
-	Future<void> _updateNews({required List<News> all, required List<String> topics}) async {
+	Future<void> _updateNews({required List<News> all, required List<BannedTopic> topics}) async {
 		setState(() { isLoaded = false; });
-		List<News> dbList = [];
+		// List<News> dbList = [];
 		SNK snk = SNK(context);
 
-
-		for(News paper in all){
-			if(!topics.any((t) => vStr(t) == vStr(paper.topic))){
-				dbList.add(paper);
-			}
-		}
-		dbList = initializeAnimations(dbList, this);
+		// for(News paper in all){
+		// 	if(!topics.any((t) => vStr(t.name) == vStr(paper.topic))){
+		// 		print("yews");
+		// 		dbList.add(paper);
+		// 	}
+		// }
 
 		setState(() {
-			news = dbList;
-			if(dbList.isNotEmpty){
+			news = initializeAnimations(all, this);
+			if(topics.isNotEmpty){
 				isLoaded = true;
 			}
 		});
 
 
-		NewsManifest manifest = await NewsClient.news();
+		NewsManifest manifest = await MosfetClient.news();
 
 		if(manifest.statusCode != 0){
 			snk.failed(message: manifest.msg);
 		} else {
 			List<News> updated = [];
-			if(dbList.isNotEmpty){
+			if(all.isNotEmpty){
 				for(int i = 0; i < manifest.news!.length; i++){
-					if(dbList.any((n) => n.isEqual(manifest.news![i]))){
-						for(int j = 0; j < dbList.length; j++){
-							if(dbList[j].isEqual(manifest.news![i])){
+					if(all.any((n) => n.isEqual(manifest.news![i]))){
+						for(int j = 0; j < all.length; j++){
+							if(all[j].isEqual(manifest.news![i])){
 								// Check for banned topics
-								if(!topics.any((t) => vStr(t) == vStr(manifest.news![i].topic))){
-									updated.add(dbList[j]);
-								}
+								// if(!topics.any((t) => vStr(t.name) == vStr(manifest.news![i].topic))){
+								//
+								// }
+								updated.add(all[j]);
 							}
 						}
 					} else { updated.add(manifest.news![i]); }  // Add the new message
 				}
-			} else { updated = manifest.news!; }  // First time news
+			} else {
+				print("Called !");
+				updated = manifest.news!;
+			}  // First time news
+
+			print("N len: ${updated.length}");
+
 			database.addAllNews(updated);  // Added loaded items to database
+
 			setState(() { news = initializeAnimations(updated, this); isLoaded = true; });
 		}
 	}
@@ -82,6 +90,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 		Loaded loaded = loadAllContents();
 		if(mounted) Provider.of<ProviderManager>(context, listen: false).changeTheme(loaded.themeMode);
 		setState(() { dMode = loaded.themeMode == ThemeMode.dark; });
+		print("B Len: ${loaded.bannedTopics.length}");
 		await _updateNews(all: loaded.news, topics: loaded.bannedTopics);
 		debugPrint("[ NEWS ARE LOADED ]");
 	}

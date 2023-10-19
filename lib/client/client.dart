@@ -33,7 +33,7 @@ class TopicManifest{
 }
 
 
-class NewsClient {
+class MosfetClient {
 	static Future<NewsManifest> news() async {
 		List<News> collectedNews = [];
 		// Check for internet connection
@@ -207,7 +207,7 @@ class NewsClient {
 		}
 
 		for(String topic in dummyTopics){
-			topics.add(BannedTopic(name: topic));
+			topics.add(BannedTopic(name: topic, isBanned: false));
 		}
 
 		return TopicManifest(statusCode: 0, topics:topics , msg: "");

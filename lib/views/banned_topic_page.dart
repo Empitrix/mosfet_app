@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mosfet/backend/backend.dart';
+import 'package:mosfet/client/client.dart';
+import 'package:mosfet/components/alerts.dart';
 import 'package:mosfet/config/navigator.dart';
+import 'package:mosfet/database/database.dart';
 import 'package:mosfet/models/banned_topic.dart';
 import 'package:mosfet/views/home_page.dart';
 
@@ -14,18 +18,46 @@ class BannedTopicPage extends StatefulWidget {
 class _BannedTopicPageState extends State<BannedTopicPage> {
 
 	List<BannedTopic> topicList = [];
+	Database database = Database();
+
+	Future<void> loadTopics() async {
+		setState(() {
+			topicList = database.allTopics();
+		});
+
+		TopicManifest? manifest = await MosfetClient.topics();
+		if(manifest.statusCode != 0){
+			if(mounted) SNK(context).failed(message: manifest.msg);
+			return;
+		}
+
+
+		List<BannedTopic> updated = [];
+
+		for(BannedTopic fTopic in manifest.topics!){
+			if(topicList.any((n) => n.isEqual(fTopic))){
+
+				updated.add(topicList.firstWhere((e) => vStr(e.name) == vStr(fTopic.name)));
+
+			} else {
+				updated.add(fTopic);
+			}
+
+
+		}
+
+		setState(() { topicList = updated; });
+
+		database.clearTopics();
+		for(BannedTopic t in updated){
+			database.addToTopics(t);
+		}
+
+	}
 
 	@override
 	void initState() {
-		setState(() {
-			topicList = [
-				BannedTopic(name: "Automation", isBanned: false),
-				BannedTopic(name: "Electronics", isBanned: false),
-				BannedTopic(name: "Flying Machines", isBanned: true),
-				BannedTopic(name: "Manufacturing", isBanned: false),
-				BannedTopic(name: "Open Source", isBanned: false),
-			];
-		});
+		loadTopics();
 		super.initState();
 	}
 
@@ -55,7 +87,7 @@ class _BannedTopicPageState extends State<BannedTopicPage> {
 										Center(
 											child: Text(
 												topicList[index].name,
-												style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+												style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
 											),
 										),
 										if(topicList[index].isBanned) Icon(
@@ -67,6 +99,7 @@ class _BannedTopicPageState extends State<BannedTopicPage> {
 								),
 								onTap: (){
 									setState(() {
+										database.toggleTopic(topicList[index]);
 										topicList[index].isBanned = !topicList[index].isBanned;
 									});
 								},

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/config/public.dart';
 import 'package:mosfet/database/office.dart';
+import 'package:mosfet/models/banned_topic.dart';
 import 'package:mosfet/models/news.dart';
 import 'dart:io';
 
@@ -9,15 +10,23 @@ Office office = Office();
 
 
 class Database {
-	void init(){
+	void init([bool force = false]){
 		File file = File(localDbPath);
 		Map init = {
 			"darkMode": false,
 			"news": [],
 			"bookmarks": [],
-			"bannedTopics": []
+			"bannedTopics": [
+				{"name": "Automation", "isBanned": false},
+				{"name": "Electronics", "isBanned": false},
+				{"name": "Flying Machines", "isBanned": false},
+				{"name": "Manufacturing", "isBanned": false},
+				{"name": "Open Source", "isBanned": false},
+				{"name": "Other", "isBanned": false},
+				{"name": "Reality", "isBanned": false},
+			]
 		};
-		if(!file.existsSync()){
+		if(!file.existsSync() || force){
 			file.createSync(recursive: true);
 			office.write(init);
 		}
@@ -87,24 +96,45 @@ class Database {
 
 
 	/* Banned Topics */
-	List<String> allTopics(){
-		List<String> topics = [];
-		for(String topic in office.read()["bannedTopics"]){
-			topics.add(topic); }
+	List<BannedTopic> allTopics(){
+		List<BannedTopic> topics = [];
+		for(Map topic in office.read()["bannedTopics"]){
+			topics.add(BannedTopic.toTopic(topic));
+		}
 		return topics;
 	}
 
-	void addToTopics(String input){
+	void addToTopics(BannedTopic input){
 		Map data = office.read();
-		data["bannedTopics"].add(input);
+		data["bannedTopics"].add(input.toJson());
 		office.write(data);
 	}
 
-	void deleteFromTopics(String input){
+	void deleteFromTopics(BannedTopic input){
 		Map data = office.read();
-		data["bannedTopics"].removeWhere((t) => vStr(t) == vStr(t));
+		data["bannedTopics"].removeWhere((t) => vStr(t["name"]) == vStr(input.name));
 		office.write(data);
 	}
 
+	void toggleTopic(BannedTopic topic){
+		Map data = office.read();
+		List<Map> topics = [];
+		for(Map t in data["bannedTopics"]){
+			if(vStr(t["name"]) == vStr(topic.name)){
+				topics.add(BannedTopic(name: topic.name, isBanned: !topic.isBanned).toJson());
+			} else {
+				topics.add(t);
+			}
+		}
+		data["bannedTopics"] = topics;
+		office.write(data);
+	}
+
+
+	void clearTopics(){
+		Map data = office.read();
+		data["bannedTopics"] = [];
+		office.write(data);
+	}
 
 }

@@ -1,3 +1,5 @@
+import 'package:mosfet/backend/backend.dart';
+
 class BannedTopic{
 	final String name;
 	late bool isBanned;
@@ -16,5 +18,12 @@ class BannedTopic{
 			"name": name,
 			"isBanned": isBanned
 		};
+	}
+
+	bool isEqual(BannedTopic input){
+		if(vStr(name) == vStr(input.name)){
+			return true;
+		}
+		return false;
 	}
 }

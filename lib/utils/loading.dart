@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mosfet/database/database.dart';
+import 'package:mosfet/models/banned_topic.dart';
 import 'package:mosfet/models/news.dart';
 import 'package:path/path.dart' as p;
 import 'package:mosfet/config/public.dart';
@@ -12,7 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 class Loaded {
 	final List<News> news;
 	final ThemeMode themeMode;
-	final List<String> bannedTopics;
+	final List<BannedTopic> bannedTopics;
 
 	Loaded({
 		required this.news,
@@ -42,6 +43,7 @@ Future<void> initializeLoading() async {
 Loaded loadAllContents() {
 	/* Load requirements contents from database */
 	Database db = Database();
+
 	return Loaded(
 		news: db.allNews(),
 		themeMode: db.loadTheme(),
