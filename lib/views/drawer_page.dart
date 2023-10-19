@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mosfet/config/navigator.dart';
+import 'package:mosfet/views/bookmark_page.dart';
 import 'package:mosfet/views/settings_page.dart';
 
 
@@ -99,7 +100,7 @@ class _DrawerPageState extends State<DrawerPage> {
 							leading: const Icon(Icons.bookmark),
 							onTap: (){
 								closeDrawer();
-
+								changeView(context, const BookmarkPage(), isPush: true);
 							},
 						),
 

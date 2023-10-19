@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mosfet/animations/expand.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/client/client.dart';
 import 'package:mosfet/components/alerts.dart';
@@ -11,6 +10,7 @@ import 'package:mosfet/config/provider_manager.dart';
 import 'package:mosfet/config/public.dart';
 import 'package:mosfet/database/database.dart';
 import 'package:mosfet/models/news.dart';
+import 'package:mosfet/utils/init.dart';
 import 'package:mosfet/utils/loading.dart';
 import 'package:mosfet/views/drawer_page.dart';
 import 'package:provider/provider.dart';
@@ -29,20 +29,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 	Database database = Database();
 	List<News> news = [];
 
-
-	List<News> _initializeAnimations(List<News> input){
-		List<News> actualNews = [];
-		for(News current in input){
-			current.animation ??= generateLinearAnimation(
-					ticket: this, initialValue: 0, durations: [250]);
-			// Add Key
-			current.key = GlobalKey();
-			actualNews.add(current);
-		}
-		// print(actualNews[0].key);
-		return actualNews;
-	}
-
 	Future<void> _updateNews({required List<News> all, required List<String> topics}) async {
 		setState(() { isLoaded = false; });
 		List<News> dbList = [];
@@ -54,7 +40,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 				dbList.add(paper);
 			}
 		}
-		dbList = _initializeAnimations(dbList);
+		dbList = initializeAnimations(dbList, this);
 
 		setState(() {
 			news = dbList;
@@ -98,14 +84,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 				}
 
 			} else {
+				/* Add the new message */
 				updated = manifest.news!;
 			}
 
-			snk.success(message: "Loaded !");
+
 			// Added loaded items to database
 			database.addAllNews(updated);
 			// Set Animations
-			updated = _initializeAnimations(updated);
+			updated = initializeAnimations(updated, this);
 			setState(() { news = updated; isLoaded = true; });
 		}
 	}
@@ -140,7 +127,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 				key: scaffoldKey,
 				drawer: DrawerPage(scaffoldKey: scaffoldKey),
 
-				/*appBar: AppBar(
+				appBar: AppBar(
 					automaticallyImplyLeading: false,
 					// title: const Text("MOSFET"),
 					title: Container(
@@ -160,46 +147,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 							if(scaffoldKey.currentState != null){ scaffoldKey.currentState!.openDrawer(); }
 						},
 					),
-				),*/
-				body: NestedScrollView(
-					headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-						return [
-							SliverAppBar(
-								centerTitle: true,
-								leading: IconButton(
-									icon: const Icon(Icons.menu),
-									onPressed: (){
-										if(scaffoldKey.currentState != null){ scaffoldKey.currentState!.openDrawer(); }
-									},
-								),
-								title: Container(
-									margin: const EdgeInsets.only(top: 5, bottom: 5),
-									child: SvgPicture.asset(
-										"assets/svg/icon.svg",
-										height: 45,
-										width: 45,
-										// ignore: deprecated_member_use
-										color: Theme.of(context).colorScheme.inverseSurface,
-									),
-								),
-								elevation: 10.0,
-								automaticallyImplyLeading: false,
-								expandedHeight: 50,
-								floating: true,
-								snap: true,
-							)
-						];
-					},
-
-					body: isLoaded ? SelectionArea(
-						child: ListView.builder(
-							padding: const EdgeInsets.only(top: 5),
-							itemCount: news.length,
-							itemBuilder: (BuildContext context, int index) => NewsItem(
-								news: news[index], setState: setState, index: index, all: news, key: news[index].key),
-						),
-					): const ShimmerView(),
-				)
+				),
+				body: isLoaded ? SelectionArea(
+					child: ListView.builder(
+						padding: const EdgeInsets.only(top: 5),
+						itemCount: news.length,
+						itemBuilder: (BuildContext context, int index) => NewsItem(
+							news: news[index], setState: setState, index: index, all: news, key: news[index].key),
+					),
+				): const ShimmerView(),
 			),
 		);
 	}
