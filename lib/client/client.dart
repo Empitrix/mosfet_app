@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/backend/parser.dart';
+import 'package:mosfet/models/banned_topic.dart';
 import 'package:mosfet/models/news.dart';
 
 /*
@@ -18,27 +19,37 @@ Status code explain
 class NewsManifest{
 	final int statusCode;
 	late List<News>? news;
+	late String msg;
 
-	NewsManifest({required this.statusCode, required this.news});
+	NewsManifest({required this.statusCode, required this.news, required this.msg});
 }
+
+class TopicManifest{
+	final int statusCode;
+	late List<BannedTopic>? topics;
+	late String msg;
+
+	TopicManifest({required this.statusCode, required this.topics, required this.msg});
+}
+
 
 class NewsClient {
 	static Future<NewsManifest> news() async {
 		List<News> collectedNews = [];
 		// Check for internet connection
 		if(!await InternetConnectionChecker().hasConnection){
-			return NewsManifest(statusCode: -1, news: null);}
+			return NewsManifest(statusCode: -1, news: null, msg: "Internet Connection");}
 
 		http.Response? response;
 		// Get data from internet
 		try{
 			response = await http.get(Uri.parse("https://mosfet.net"));
 		} catch(e){
-			return NewsManifest(statusCode: -3, news: null);
+			return NewsManifest(statusCode: -3, news: null, msg: "Something Wrong");
 		}
 
 		if(response.statusCode != 200){
-			return NewsManifest(statusCode: -2, news: null);}
+			return NewsManifest(statusCode: -2, news: null, msg: "Connection Failed");}
 
 
 		Map output = htmlToJson(response.body);
@@ -140,6 +151,65 @@ class NewsClient {
 			collectedNews.add(News.toNews(thisNews));
 		}
 
-		return NewsManifest(statusCode: 0, news: collectedNews);
+		return NewsManifest(statusCode: 0, news: collectedNews, msg: "");
+	}
+
+
+
+
+	static Future<TopicManifest> topics() async {
+		List<BannedTopic> topics = [];
+		Set<String> dummyTopics = {};
+
+		http.Response? response;
+		try{
+			response = await http.get(Uri.parse("https://mosfet.net"));
+		} catch(e){
+			return TopicManifest(statusCode: -3, topics: null, msg: "Something Wrong");
+		}
+
+		if(response.statusCode != 200){
+			return TopicManifest(statusCode: -2, topics: null, msg: "Connection Failed");}
+
+
+		Map output = htmlToJson(response.body);
+
+		List a = output["children"].firstWhere((e) => e["tag"] == "header")["children"];
+		a = a.firstWhere((e) => e["tag"] == "div")["children"];
+		for(Map i in a){
+			if(i["attributes"] == null){ continue; }
+			if(i["attributes"]["class"] == "rss-wrap"){
+				for(Map j in i["children"]){
+					if(j["attributes"] == null){ continue; }
+					if(j["attributes"]["class"] == "rss-menu"){
+						for(Map k in j["children"]){
+							if (k["attributes"] == null) { continue; }
+							if(k["attributes"]["class"] == "rss-menu-inner"){
+								for(Map l in k["children"]){
+									if(l["tag"] == null){ continue; }
+									if(l["tag"] == "ul"){
+										for(Map n in l["children"]){
+											if(n["tag"] == null){ continue; }
+											if(n["tag"] == "li"){
+												String topic = n["children"][0]["children"][0]["children"][0]["text"];
+												if(vStr(topic) != "all news"){
+													dummyTopics.add(topic.trim());
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for(String topic in dummyTopics){
+			topics.add(BannedTopic(name: topic));
+		}
+
+		return TopicManifest(statusCode: 0, topics:topics , msg: "");
 	}
 }

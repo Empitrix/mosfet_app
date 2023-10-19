@@ -53,22 +53,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 		NewsManifest manifest = await NewsClient.news();
 
 		if(manifest.statusCode != 0){
-			if(manifest.statusCode == -1){
-				snk.failed(message: "Internet Connection!");
-			}
-			else if(manifest.statusCode == -2){
-				snk.failed(message: "Try Again!");
-			}
-			else if(manifest.statusCode == -3){
-				snk.failed(message: "Connection Failed!");
-			}
+			snk.failed(message: manifest.msg);
 		} else {
-
 			List<News> updated = [];
 			if(dbList.isNotEmpty){
 				for(int i = 0; i < manifest.news!.length; i++){
 					if(dbList.any((n) => n.isEqual(manifest.news![i]))){
-
 						for(int j = 0; j < dbList.length; j++){
 							if(dbList[j].isEqual(manifest.news![i])){
 								// Check for banned topics
@@ -77,23 +67,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 								}
 							}
 						}
-
-					} else {
-						updated.add(manifest.news![i]);
-					}
+					} else { updated.add(manifest.news![i]); }  // Add the new message
 				}
-
-			} else {
-				/* Add the new message */
-				updated = manifest.news!;
-			}
-
-
-			// Added loaded items to database
-			database.addAllNews(updated);
-			// Set Animations
-			updated = initializeAnimations(updated, this);
-			setState(() { news = updated; isLoaded = true; });
+			} else { updated = manifest.news!; }  // First time news
+			database.addAllNews(updated);  // Added loaded items to database
+			setState(() { news = initializeAnimations(updated, this); isLoaded = true; });
 		}
 	}
 
@@ -103,12 +81,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 		database.init();
 		Loaded loaded = loadAllContents();
 		if(mounted) Provider.of<ProviderManager>(context, listen: false).changeTheme(loaded.themeMode);
-		setState(() {
-			dMode = loaded.themeMode == ThemeMode.dark;
-			// news = loaded.news;
-		});
+		setState(() { dMode = loaded.themeMode == ThemeMode.dark; });
 		await _updateNews(all: loaded.news, topics: loaded.bannedTopics);
-		// setState(() { isLoaded = true; });
 		debugPrint("[ NEWS ARE LOADED ]");
 	}
 
@@ -133,12 +107,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 					title: Container(
 						margin: const EdgeInsets.only(top: 5, bottom: 5),
 						child: SvgPicture.asset(
-							"assets/svg/icon.svg",
-							height: 45,
-							width: 45,
+							"assets/svg/icon.svg", height: 45, width: 45,
 							// ignore: deprecated_member_use
-							color: Theme.of(context).colorScheme.inverseSurface,
-						),
+							color: Theme.of(context).colorScheme.inverseSurface),
 					),
 					centerTitle: true,
 					leading: IconButton(
@@ -148,13 +119,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 						},
 					),
 				),
-				body: isLoaded ? SelectionArea(
-					child: ListView.builder(
-						padding: const EdgeInsets.only(top: 5),
-						itemCount: news.length,
-						itemBuilder: (BuildContext context, int index) => NewsItem(
-							news: news[index], setState: setState, index: index, all: news, key: news[index].key),
-					),
+				body: isLoaded ? ListView.builder(
+					padding: const EdgeInsets.only(top: 5),
+					itemCount: news.length,
+					itemBuilder: (BuildContext context, int index) => NewsItem(
+						news: news[index], setState: setState, index: index, all: news, key: news[index].key),
 				): const ShimmerView(),
 			),
 		);
