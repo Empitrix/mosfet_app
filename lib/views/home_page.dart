@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mosfet/animations/expand.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/client/client.dart';
+import 'package:mosfet/components/alerts.dart';
 import 'package:mosfet/components/news_item.dart';
 import 'package:mosfet/components/shimmer_view.dart';
 import 'package:mosfet/config/provider_manager.dart';
@@ -44,18 +45,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
 	Future<void> _updateNews({required List<News> all, required List<String> topics}) async {
 		setState(() { isLoaded = false; });
-		List<News> dummyList = [];
+		List<News> dbList = [];
+		SNK snk = SNK(context);
+
 
 		for(News paper in all){
 			if(!topics.any((t) => vStr(t) == vStr(paper.topic))){
-				dummyList.add(paper);
+				dbList.add(paper);
 			}
 		}
-		dummyList = _initializeAnimations(dummyList);
+		dbList = _initializeAnimations(dbList);
 
 		setState(() {
-			news = dummyList;
-			if(dummyList.isNotEmpty){
+			news = dbList;
+			if(dbList.isNotEmpty){
 				isLoaded = true;
 			}
 		});
@@ -64,21 +67,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 		NewsManifest manifest = await NewsClient.news();
 
 		if(manifest.statusCode != 0){
-			if(manifest.statusCode == -1){ /*Internet connection*/ }
-			else if(manifest.statusCode == -2){ /*Something Wrong*/ }
-			else if(manifest.statusCode == -3){ /*Connection Failed*/ }
+			if(manifest.statusCode == -1){
+				snk.failed(message: "Internet Connection!");
+			}
+			else if(manifest.statusCode == -2){
+				snk.failed(message: "Try Again!");
+			}
+			else if(manifest.statusCode == -3){
+				snk.failed(message: "Connection Failed!");
+			}
 		} else {
 
 			List<News> updated = [];
-			if(dummyList.isNotEmpty){
+			if(dbList.isNotEmpty){
 				for(int i = 0; i < manifest.news!.length; i++){
-					if(dummyList.any((n) => n.isEqual(manifest.news![i]))){
+					if(dbList.any((n) => n.isEqual(manifest.news![i]))){
 
-						for(int j = 0; j < dummyList.length; j++){
-							if(dummyList[j].isEqual(manifest.news![i])){
+						for(int j = 0; j < dbList.length; j++){
+							if(dbList[j].isEqual(manifest.news![i])){
 								// Check for banned topics
 								if(!topics.any((t) => vStr(t) == vStr(manifest.news![i].topic))){
-									updated.add(dummyList[j]);
+									updated.add(dbList[j]);
 								}
 							}
 						}
@@ -91,6 +100,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 			} else {
 				updated = manifest.news!;
 			}
+
+			snk.success(message: "Loaded !");
 			// Added loaded items to database
 			database.addAllNews(updated);
 			// Set Animations
