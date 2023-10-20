@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mosfet/components/sheets.dart';
 import 'package:mosfet/config/navigator.dart';
 import 'package:mosfet/views/banned_topic_page.dart';
 import 'package:mosfet/views/bookmark_page.dart';
@@ -119,8 +120,8 @@ class _DrawerPageState extends State<DrawerPage> {
 							title: const Text("About"),
 							leading: const Icon(Icons.info),
 							onTap: (){
+								showAboutSheet(context: context);
 								closeDrawer();
-
 							},
 						)
 

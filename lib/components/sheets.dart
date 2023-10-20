@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/components/alerts.dart';
 import 'package:mosfet/database/database.dart';
@@ -109,6 +110,7 @@ void showMoreBottomSheet({required BuildContext context, required News news, Fun
 									} else {
 										snk.success(message: "Failed to save!");
 									}
+									// ignore: use_build_context_synchronously
 									Navigator.pop(context);
 
 								},
@@ -116,6 +118,65 @@ void showMoreBottomSheet({required BuildContext context, required News news, Fun
 
 
 							const SizedBox(height: 20),
+						],
+					),
+				),
+			);
+		}
+	);
+}
+
+
+
+
+
+
+void showAboutSheet({required BuildContext context}){
+	_showBottomSheetModel(
+		context: context,
+		builder: (BuildContext context){
+			SNK snk = SNK(context);
+			return Container(
+				margin: const EdgeInsets.only(right: 12, left: 12, bottom: 10),
+				width: MediaQuery.of(context).size.width,
+				child: SingleChildScrollView(
+					child: Column(
+						crossAxisAlignment: CrossAxisAlignment.start,
+						children: [
+							Text("MOSFET",
+								style: Theme.of(context).textTheme.displaySmall!
+									.copyWith(fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+							const SizedBox(height: 12),
+							Text("Simple Tech News Update", style: Theme.of(context).textTheme.bodyLarge),
+							Text(
+								"Keeping you up to date with technological change.",
+								style: Theme.of(context).textTheme.bodyLarge),
+							const SizedBox(height: 20),
+							/* Links */
+							Row(
+								children: [
+									IconButton(
+										icon: const FaIcon(FontAwesomeIcons.youtube),
+										onPressed: () => openCustomURL("https://www.youtube.com/@MOSFETnet"),
+									),
+									IconButton(
+										icon: const Icon(Icons.language),
+										onPressed: () => openCustomURL("https://mosfet.net/"),
+									),
+									const SizedBox(height: 25, child: VerticalDivider()),
+									IconButton(
+										tooltip: "N-O-D-E",
+										icon: const Icon(Icons.web),
+										onPressed: () => openCustomURL("https://n-o-d-e.net/"),
+									),
+									const SizedBox(height: 25, child: VerticalDivider()),
+									IconButton(
+										icon: const FaIcon(FontAwesomeIcons.github),
+										onPressed: () => openCustomURL("https://github.com/empitrix/mosfet_app"),
+									),
+								],
+							),
+							const SizedBox(height: 15),
 						],
 					),
 				),

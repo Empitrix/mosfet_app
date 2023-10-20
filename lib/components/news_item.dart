@@ -117,14 +117,14 @@ class NewsItem extends StatelessWidget {
 										errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
 									),
 								),
-								Row(
-									mainAxisAlignment: MainAxisAlignment.spaceBetween,
-									children: [
-										Expanded(
-											child: Text(news.source, style: const TextStyle(fontWeight: FontWeight.bold)),
-										),
-									],
-								),
+								// Row(
+								// 	mainAxisAlignment: MainAxisAlignment.spaceBetween,
+								// 	children: [
+								// 		Expanded(
+								// 			child: Text(news.source, style: const TextStyle(fontWeight: FontWeight.bold)),
+								// 		),
+								// 	],
+								// ),
 								const SizedBox(height: 12),
 								SizedBox(
 									width: double.infinity,
@@ -132,6 +132,8 @@ class NewsItem extends StatelessWidget {
 										child: Column(
 											crossAxisAlignment: CrossAxisAlignment.start,
 											children: [
+												Text(news.source, style: const TextStyle(fontWeight: FontWeight.bold)),
+												const SizedBox(height: 8),
 												for(String text in news.texts) Column(
 													crossAxisAlignment: CrossAxisAlignment.start,
 													mainAxisAlignment: MainAxisAlignment.start,
