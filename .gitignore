@@ -119,3 +119,11 @@ todo.txt
 .DS_Store
 doc/api/
 pubspec.lock
+
+
+
+
+# (Release added by me)
+export.ps1
+/release/
+
