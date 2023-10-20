@@ -6,6 +6,7 @@ import 'package:mosfet/animations/expand.dart';
 import 'package:mosfet/backend/backend.dart';
 import 'package:mosfet/backend/clipboard.dart';
 import 'package:mosfet/components/alerts.dart';
+import 'package:mosfet/components/sheets.dart';
 import 'package:mosfet/models/news.dart';
 
 
@@ -44,7 +45,7 @@ class NewsItem extends StatelessWidget {
 					onPointerDown: (pointer){
 						if(Platform.isWindows || Platform.isLinux){
 							if(pointer.buttons == 2){
-								print("Yay !");
+								showMoreBottomSheet(context: context, news: news);
 							}
 						}
 					},
@@ -95,6 +96,7 @@ class NewsItem extends StatelessWidget {
 								setState((){ news.isSeen = true; });
 							}
 						},
+						onLongPress: () => showMoreBottomSheet(context: context, news: news),
 					),
 				),
 				expandAnimation(
