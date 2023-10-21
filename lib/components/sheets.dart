@@ -10,7 +10,6 @@ import 'package:mosfet/utils/save_image.dart';
 
 Database database = Database();
 
-
 void _showBottomSheetModel({required BuildContext context, required Function builder}){
 	showModalBottomSheet(
 		context: context,
@@ -126,16 +125,10 @@ void showMoreBottomSheet({required BuildContext context, required News news, Fun
 	);
 }
 
-
-
-
-
-
 void showAboutSheet({required BuildContext context}){
 	_showBottomSheetModel(
 		context: context,
 		builder: (BuildContext context){
-			SNK snk = SNK(context);
 			return Container(
 				margin: const EdgeInsets.only(right: 12, left: 12, bottom: 10),
 				width: MediaQuery.of(context).size.width,

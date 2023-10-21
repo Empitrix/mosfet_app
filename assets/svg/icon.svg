@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1049 1049">
   <g>
-    <polygon points="658.43 832.77 524.5 966.71 390.56 832.77 658.43 832.77" style="stroke-width: 0px;"/>
-    <polygon points="837.56 653.65 731.37 759.84 317.63 759.84 211.44 653.65 837.56 653.65" style="stroke-width: 0px;"/>
-    <polygon points="966.71 524.5 916.31 574.9 132.69 574.9 82.29 524.5 134.87 471.92 914.13 471.92 966.71 524.5" style="stroke-width: 0px;"/>
-    <polygon points="835.38 393.17 213.62 393.17 319.45 287.34 729.55 287.34 835.38 393.17" style="stroke-width: 0px;"/>
-    <polygon points="656.98 214.77 392.02 214.77 524.5 82.29 656.98 214.77" style="stroke-width: 0px;"/>
+    <polygon points="658.43 832.77 524.5 966.71 390.56 832.77 658.43 832.77" style="fill: #fff; stroke-width: 0px;"/>
+    <polygon points="837.56 653.65 731.37 759.84 317.63 759.84 211.44 653.65 837.56 653.65" style="fill: #fff; stroke-width: 0px;"/>
+    <polygon points="966.71 524.5 916.31 574.9 132.69 574.9 82.29 524.5 134.87 471.92 914.13 471.92 966.71 524.5" style="fill: #fff; stroke-width: 0px;"/>
+    <polygon points="835.38 393.17 213.62 393.17 319.45 287.34 729.55 287.34 835.38 393.17" style="fill: #fff; stroke-width: 0px;"/>
+    <polygon points="656.98 214.77 392.02 214.77 524.5 82.29 656.98 214.77" style="fill: #fff; stroke-width: 0px;"/>
   </g>
   <rect width="1049" height="1049" style="fill: none; stroke-width: 0px;"/>
 </svg>

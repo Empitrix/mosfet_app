@@ -40,17 +40,6 @@ class _DrawerPageState extends State<DrawerPage> {
 			child: Scaffold(
 				body: ListView(
 					children: [
-
-						// Container(
-						// 	margin: const EdgeInsets.only(top: 20, bottom: 20, right: 12, left: 12),
-						// 	child: const Center(
-						// 		child: Text(
-						// 			"MOSFET",
-						// 			style: TextStyle(fontSize: 40, fontFamily: "TitilliumWebSemiBold"),
-						// 		),
-						// 	),
-						// ),
-
 						Container(
 							margin: const EdgeInsets.only(top: 20, bottom: 20, right: 12, left: 12),
 							child: Center(
@@ -74,7 +63,6 @@ class _DrawerPageState extends State<DrawerPage> {
 														style: TextStyle(fontSize: 35, fontFamily: "TitilliumWebSemiBold"),
 													),
 													Text(
-														// "Keeping you up to date with technological change.",
 														"Simple Tech News Update",
 														style: TextStyle(
 															fontWeight: FontWeight.bold
@@ -87,8 +75,6 @@ class _DrawerPageState extends State<DrawerPage> {
 								)
 							),
 						),
-
-
 						ListTile(
 							title: const Text("Settings"),
 							leading: const Icon(Icons.settings),
@@ -97,7 +83,6 @@ class _DrawerPageState extends State<DrawerPage> {
 								changeView(context, const SettingsPage(), isPush: true);
 							},
 						),
-
 						ListTile(
 							title: const Text("Bookmark"),
 							leading: const Icon(Icons.bookmark),
@@ -106,7 +91,6 @@ class _DrawerPageState extends State<DrawerPage> {
 								changeView(context, const BookmarkPage(), isPush: true);
 							},
 						),
-
 						ListTile(
 							title: const Text("Banned Topics"),
 							leading: const Icon(Icons.cancel_presentation),
@@ -115,7 +99,6 @@ class _DrawerPageState extends State<DrawerPage> {
 								changeView(context, BannedTopicPage(onLoad: widget.onLoad), isPush: true);
 							},
 						),
-
 						ListTile(
 							title: const Text("About"),
 							leading: const Icon(Icons.info),
@@ -124,9 +107,6 @@ class _DrawerPageState extends State<DrawerPage> {
 								closeDrawer();
 							},
 						)
-
-
-
 					],
 				),
 			),
