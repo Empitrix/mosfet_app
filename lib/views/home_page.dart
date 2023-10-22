@@ -121,12 +121,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 						},
 					),
 				),
-				body: isLoaded ? ListView.builder(
-					padding: const EdgeInsets.only(top: 5),
-					itemCount: news.length,
-					itemBuilder: (BuildContext context, int index) => NewsItem(
-						news: news[index], setState: setState, index: index, all: news, key: news[index].key),
-				): const ShimmerView(),
+				body: RefreshIndicator(
+					onRefresh: () async {
+						await initialize(true);
+						await Future.delayed(const Duration(seconds: 1));
+					},
+					child: isLoaded ? ListView.builder(
+						padding: const EdgeInsets.only(top: 5),
+						itemCount: news.length,
+						itemBuilder: (BuildContext context, int index) => NewsItem(
+							news: news[index],
+							setState: setState,
+							index: index,
+							all: news,
+							key: news[index].key,
+							onLoad: initialize,
+						),
+					): const ShimmerView(),
+				),
 			),
 		);
 	}

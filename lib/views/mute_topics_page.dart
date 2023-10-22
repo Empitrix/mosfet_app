@@ -47,7 +47,8 @@ class _BannedTopicPageState extends State<BannedTopicPage> {
 
 		}
 
-		setState(() { topicList = updated; });
+		WidgetsBinding.instance.addPostFrameCallback((_){ setState(() { topicList = updated; }); });
+
 
 		database.clearTopics();
 		for(BannedTopic t in updated){

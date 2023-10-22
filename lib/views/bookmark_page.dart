@@ -51,7 +51,12 @@ class _BookmarkPageState extends State<BookmarkPage> with TickerProviderStateMix
 				body: bookedItems.isNotEmpty ? ListView.builder(
 					itemCount: bookedItems.length,
 					itemBuilder: (BuildContext context, int index) => NewsItem(
-						news: bookedItems[index], setState: setState, index: index, all: bookedItems),
+						news: bookedItems[index],
+						setState: setState,
+						index: index,
+						all: bookedItems,
+						onLoad: loadBookmarks
+					),
 				) : const Center(child: Text("No Item!")),
 			)
 		);

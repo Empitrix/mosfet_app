@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:mosfet/components/alerts.dart';
 import 'package:mosfet/components/tile.dart';
 import 'package:mosfet/config/navigator.dart';
 import 'package:mosfet/config/provider_manager.dart';
@@ -61,6 +63,37 @@ class _SettingsPageState extends State<SettingsPage> {
 								});
 							}
 						),
+						ListTile(
+							leading: const Icon(Icons.folder),
+							title: const Text("Clear Temp Folder"),
+							onTap: (){
+								showDialog(
+									context: context,
+									builder: (context) => AlertDialog(
+										title: const Text("Clean"),
+										content: const Text(
+											"Did you want to clean up temp folder?\nAll the images will download again"),
+										actions: [
+											OutlinedButton(
+												onPressed: () => Navigator.pop(context),
+												child: const Text("No"),
+											),
+											FilledButton(
+												onPressed: () async {
+													DefaultCacheManager manager = DefaultCacheManager();
+													await manager.emptyCache(); //clears all data in cache.
+													if(mounted){
+														SNK(context).success(message: "Cleaned!");
+														Navigator.pop(context);
+													}
+												},
+												child: const Text("Yes"),
+											)
+										],
+									)
+								);
+							},
+						)
 					],
 				),
 			),

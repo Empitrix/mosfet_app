@@ -31,8 +31,8 @@ Future<void> initializeLoading() async {
 		return;
 	}
 
-	// if(await Permission.manageExternalStorage.request().isGranted){
-	if(await Permission.storage.request().isGranted){
+	if(await Permission.manageExternalStorage.request().isGranted){
+	// if(await Permission.storage.request().isGranted){
 		localDbPath = p.join((await getApplicationSupportDirectory()).absolute.path, "db.json");
 	} else {
 		openAppSettings();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mosfet/components/sheets.dart';
 import 'package:mosfet/config/navigator.dart';
-import 'package:mosfet/views/banned_topic_page.dart';
+import 'package:mosfet/views/mute_topics_page.dart';
 import 'package:mosfet/views/bookmark_page.dart';
 import 'package:mosfet/views/settings_page.dart';
 
@@ -92,7 +92,7 @@ class _DrawerPageState extends State<DrawerPage> {
 							},
 						),
 						ListTile(
-							title: const Text("Banned Topics"),
+							title: const Text("Mute Topics"),
 							leading: const Icon(Icons.cancel_presentation),
 							onTap: (){
 								closeDrawer();

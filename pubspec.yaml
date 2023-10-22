@@ -12,6 +12,7 @@ dependencies:
   change_app_package_name: ^1.1.0
   flutter:
     sdk: flutter
+  flutter_cache_manager: ^3.3.1
   flutter_launcher_icons: ^0.13.1
   flutter_svg: ^2.0.7
   font_awesome_flutter: ^10.6.0
@@ -37,6 +38,7 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icon/icon.png"
   min_sdk_android: 21
+  background_color: "#000000"
   windows:
     generate: true
     icon_size: 256

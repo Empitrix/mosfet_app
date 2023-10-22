@@ -80,10 +80,11 @@ void showMoreBottomSheet({required BuildContext context, required News news, Fun
 
 							if(isInBannedTopics) ListTile(
 								leading: const Icon(Icons.topic),
-								title: const Text("Banned this topic"),
+								title: const Text("Mute this topic"),
 								onTap: (){
-									database.addToTopics(BannedTopic(name: news.topic));
+									database.toggleTopic(BannedTopic(name: news.topic));
 									if(onLoad != null){ onLoad(); }
+									Navigator.pop(context);
 								},
 							),
 
@@ -143,6 +144,11 @@ void showAboutSheet({required BuildContext context}){
 							Text("Simple Tech News Update", style: Theme.of(context).textTheme.bodyLarge),
 							Text(
 								"Keeping you up to date with technological change.",
+								style: Theme.of(context).textTheme.bodyLarge),
+							const SizedBox(height: 12),
+							Text(
+								"MOSFET is a simple, ephemeral news source for keeping up with technological"
+								"change. Posts older than 30 days are auto-deleted",
 								style: Theme.of(context).textTheme.bodyLarge),
 							const SizedBox(height: 20),
 							/* Links */

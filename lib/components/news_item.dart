@@ -30,11 +30,12 @@ void _openFooter({
 
 class NewsItem extends StatelessWidget {
 	final News news;
-	final Function setState;
 	final int index;
+	final Function setState;
 	final List<News> all;
+	final Function? onLoad;
 	const NewsItem({
-		super.key, required this.news, required this.setState, required this.index, required this.all});
+		super.key, required this.news, required this.setState, required this.index, required this.all, this.onLoad});
 
 	@override
 	Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class NewsItem extends StatelessWidget {
 					onPointerDown: (pointer){
 						if(Platform.isWindows || Platform.isLinux){
 							if(pointer.buttons == 2){
-								showMoreBottomSheet(context: context, news: news);
+								showMoreBottomSheet(context: context, news: news, onLoad: onLoad);
 							}
 						}
 					},
@@ -179,6 +180,5 @@ class NewsItem extends StatelessWidget {
 				)
 			],
 		);
-
 	}
 }
