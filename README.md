@@ -1,7 +1,7 @@
 <div align="center">
     <img src="./assets/icon/icon.png" width="128" height="128" style="display: block; margin: 0 auto; background-color: #0D1117"/>
     <h1>MOSFET</h1>
-    <p>A cross-platform application for the [mosfet.net](https://mosfet.net) website written in Flutter</p>
+    <p>Simple Tech News Update</p>
 </div>
 
 ---
@@ -13,6 +13,8 @@
 </p>
 
 
+A cross-platform application for the [mosfet.net](https://mosfet.net) website written in Flutter
+
 ## Futures
 - Save posts as bookmarks
 - Mute certain topics
@@ -21,8 +23,8 @@
 - Copy or launch URLs
 
 ## Installations
-- [Android]()
-- [Windows]()
+- [Android](https://github.com/Empitrix/mosfet_app/releases/download/v0.1.0/mosfet.apk)
+- [Windows](https://github.com/Empitrix/mosfet_app/releases/download/v0.1.0/mosfet.exe)
 
 ## Create
 First clone the project
@@ -36,6 +38,7 @@ flutter create .
 - [ ] Add a color filter like the website
 - [ ] Use [feeds](https://mosfet.net/feed) to make APIs
 - [ ] Refactor the code base
+- [ ] Add the translate button
 
 ## Acknowledgments
 - [**MOSFET**](https://mosfet.net): The Mosfet main website
